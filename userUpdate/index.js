@@ -62,12 +62,17 @@ const startQueue = async (userUpdateQueue) => {
 	}
 }
 
+const processResults = (jobResults) => {
+	//could grab data and reprocess until no failures
+}
+
 const startJob = async () => {
 	try{
 		const pathName = process.env.PATH_NAME;
 		const users = await processInput(pathName);
 		const userUpdateQueue = genQueue(users)
 		const jobResults = await startQueue(userUpdateQueue)
+		processResults(jobResults)
 	} catch (err) {
 		throw err 
 	}
