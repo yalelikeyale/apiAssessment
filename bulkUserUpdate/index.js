@@ -19,10 +19,7 @@ const genBulkUpdate = async (users) => {
 			"users":users
 		}
 	}
-	// axios(axiosConfig).then(response=>{
-	// 	if failures write to CSV with timestamp
-	// 	else return success
-	// })
+	return axios(axiosConfig);
 }
 
 
@@ -59,9 +56,10 @@ const processInput = async (pathName) => {
 
 const startJob = async () => {
 	try{
-		const pathName = process.env.PATH_NAME
+		const pathName = process.env.PATH_NAME;
 		const users = await processInput(pathName);
-		genBulkUpdate(users)		
+		const bulkUpdate = genBulkUpdate(users);
+		console.log(bulkUpdate)
 	} catch (err) {
 		throw err 
 	}

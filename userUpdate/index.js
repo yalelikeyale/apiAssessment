@@ -15,7 +15,7 @@ const processInput = async (pathName) => {
 		if(usersArray){
 			return usersArray
 		} else {
-			return new Error('No Data to Process')
+			throw new Error('No Data to Process')
 		}
 	} catch (err) {
 		throw err
@@ -71,8 +71,8 @@ const startJob = async () => {
 		const pathName = process.env.PATH_NAME;
 		const users = await processInput(pathName);
 		const userUpdateQueue = genQueue(users)
-		const jobResults = await startQueue(userUpdateQueue)
-		processResults(jobResults)
+		// const jobResults = await startQueue(userUpdateQueue)
+		// processResults(jobResults)
 	} catch (err) {
 		throw err 
 	}
