@@ -19,14 +19,14 @@ const genBulkUpdate = async (users) => {
 			"users":users
 		}
 	}
-	//axios(axiosConfig).then(response=>{
-		//if failures write to CSV with timestamp
-		//else return success
-	//})
+	// axios(axiosConfig).then(response=>{
+	// 	if failures write to CSV with timestamp
+	// 	else return success
+	// })
 }
 
 
-const payloadGenerator = async (usersArray) => {
+const payloadGenerator = (usersArray) => {
 	const usersPayload = [];
 	usersArray.forEach(user=>{
 		const email = user.email;
@@ -46,14 +46,14 @@ const payloadGenerator = async (usersArray) => {
 const processInput = async (pathName) => {
 	try {
 		const usersArray = await csv().fromFile(pathName);
-		const usersPayload = await payloadGenerator(usersArray);
+		const usersPayload = payloadGenerator(usersArray);
 		if(usersPayload){
 			return usersPayload
 		} else {
-			return new Error('No Data to Submit')
+			throw new Error('No Data to Submit')
 		}
 	} catch (err) {
-		console.log(err);
+		throw err 
 	}
 }
 
@@ -63,7 +63,7 @@ const startJob = async () => {
 		const users = await processInput(pathName);
 		genBulkUpdate(users)		
 	} catch (err) {
-		console.log(err);
+		throw err 
 	}
 
 }
