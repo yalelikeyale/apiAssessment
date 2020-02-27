@@ -1,7 +1,6 @@
 'use strict';
 
 const axios = require('axios');
-const Bottleneck = require('bottleneck');
 const csv = require('csvtojson');
 
 // set environment variables
@@ -19,7 +18,8 @@ const genBulkUpdate = async (users) => {
 			"users":users
 		}
 	}
-	//axios(axiosConfig)
+
+	//make api call axios(axiosConfig)
 	//grab response and if failures grab and reprocess
 }
 
