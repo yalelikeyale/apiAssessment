@@ -5,22 +5,24 @@ const csv = require('csvtojson');
 
 // set environment variables
 require('dotenv').config();
-const pathName = process.env.PATH_NAME
-const apiKey = process.env.API_KEY
 
 
 
 const genBulkUpdate = async (users) => {
 	const axiosConfig = {
-		url:'',
+		url:'https://api.iterable.com/api/users/bulkUpdate',
 		method:'post',
+		headers:{
+			'Api-Key':process.env.API_KEY
+		},
 		data:{
 			"users":users
 		}
 	}
-
-	//make api call axios(axiosConfig)
-	//grab response and if failures grab and reprocess
+	//axios(axiosConfig).then(response=>{
+		//if failures write to CSV with timestamp
+		//else return success
+	//})
 }
 
 
@@ -57,6 +59,7 @@ const processInput = async (pathName) => {
 
 const startJob = async () => {
 	try{
+		const pathName = process.env.PATH_NAME
 		const users = await processInput(pathName);
 		genBulkUpdate(users)		
 	} catch (err) {
