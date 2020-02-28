@@ -2,24 +2,15 @@
 
 const axios = require('axios');
 const csv = require('csvtojson');
+const Bottleneck = require('bottleneck')
 
 // set environment variables
 require('dotenv').config();
 
-
-const processInput = async (pathName) => {
-	try {
-		const usersArray = await csv().fromFile(pathName);
-		const usersPayload = payloadGenerator(usersArray);
-		if(usersPayload){
-			return usersPayload
-		} else {
-			throw new Error('No Data to Submit')
-		}
-	} catch (err) {
-		throw err 
-	}
-}
+const limiter = new Bottleneck({
+	minTime:250,
+	maxConcurrent:1
+})
 
 const payloadGenerator = (usersArray) => {
 	const usersPayload = [];
@@ -50,18 +41,51 @@ const genBulkUpdate = async (users) => {
 	}
 	return axios(axiosConfig);
 }
+const throttledBulkUpdate = limiter.wrap(genBulkUpdate);
 
-const processResults = () => {
-	//generate success metrics
-	//save failures for retry if appropriate
+const executeUserUpdateQueue = async (userBatches) => {
+	const userBulkUpdateQueue = userBatches.map(batch=>{
+		return throttledBulkUpdate(batch)
+	})
+	try{
+		const results = Promise.all(userBulkUpdateQueue)
+		if(results){
+			return results
+		} else {
+			throw new Error('No Results');
+		}
+	} catch(err) {
+		throw err
+	}
+}
+
+function chunkUsersPayload(array, size) {
+   if(array.length <= size){
+       return [array]
+   }
+   return [array.slice(0,size), ...chunkUsersPayload(array.slice(size), size)]
+}
+
+const processInput = async (pathName) => {
+	try {
+		const usersArray = await csv().fromFile(pathName);
+		const usersPayload = payloadGenerator(usersArray);
+		const userBatches = chunkUsersPayload(usersPayload,50)
+		if(userBatches){
+			return userBatches
+		} else {
+			throw new Error('No Data to Submit')
+		}
+	} catch (err) {
+		throw err 
+	}
 }
 
 const startJob = async () => {
 	const pathName = process.env.PATH_NAME;
 	try{
-		const users = await processInput(pathName);
-		const results = await genBulkUpdate(users);
-		// processResults(results)
+		const userBatches = await processInput(pathName);
+		const results = await executeUserUpdateQueue(userBatches);
 		console.log(results)
 	} catch (err) {
 		throw err 
