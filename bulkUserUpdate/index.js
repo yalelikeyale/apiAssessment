@@ -7,21 +7,19 @@ const csv = require('csvtojson');
 require('dotenv').config();
 
 
-
-const genBulkUpdate = async (users) => {
-	const axiosConfig = {
-		url:'https://api.iterable.com/api/users/bulkUpdate',
-		method:'post',
-		headers:{
-			'Api-Key':process.env.API_KEY
-		},
-		data:{
-			"users":users
+const processInput = async (pathName) => {
+	try {
+		const usersArray = await csv().fromFile(pathName);
+		const usersPayload = payloadGenerator(usersArray);
+		if(usersPayload){
+			return usersPayload
+		} else {
+			throw new Error('No Data to Submit')
 		}
+	} catch (err) {
+		throw err 
 	}
-	return axios(axiosConfig);
 }
-
 
 const payloadGenerator = (usersArray) => {
 	const usersPayload = [];
@@ -39,27 +37,32 @@ const payloadGenerator = (usersArray) => {
 	return usersPayload
 }
 
-
-const processInput = async (pathName) => {
-	try {
-		const usersArray = await csv().fromFile(pathName);
-		const usersPayload = payloadGenerator(usersArray);
-		if(usersPayload){
-			return usersPayload
-		} else {
-			throw new Error('No Data to Submit')
+const genBulkUpdate = async (users) => {
+	const axiosConfig = {
+		url:'https://api.iterable.com/api/users/bulkUpdate',
+		method:'post',
+		headers:{
+			'Api-Key':process.env.API_KEY
+		},
+		data:{
+			"users":users
 		}
-	} catch (err) {
-		throw err 
 	}
+	return axios(axiosConfig);
+}
+
+const processResults = () => {
+	//generate success metrics
+	//save failures for retry if appropriate
 }
 
 const startJob = async () => {
+	const pathName = process.env.PATH_NAME;
 	try{
-		const pathName = process.env.PATH_NAME;
 		const users = await processInput(pathName);
-		const bulkUpdate = genBulkUpdate(users);
-		console.log(bulkUpdate)
+		const results = await genBulkUpdate(users);
+		// processResults(results)
+		console.log(results)
 	} catch (err) {
 		throw err 
 	}
