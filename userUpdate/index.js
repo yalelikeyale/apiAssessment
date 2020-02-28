@@ -7,7 +7,10 @@ const Bottleneck = require('bottleneck');
 // set environment variables
 require('dotenv').config();
 
-
+const limiter = new Bottleneck({
+	minTime:100,
+	maxConcurrent:1
+})
 
 const processInput = async (pathName) => {
 	try {
@@ -40,39 +43,37 @@ const genRequestPromise = (user) => {
 	} 
 	return axios(axiosConfig)
 }
+const throttledUserUpdate = limiter.wrap(genRequestPromise);
 
-const genQueue = (users) => {
-	const limiter = new Bottleneck({
-		minTime:100,
-		maxConcurrent:1
-	})
-	const throttledUserUpdate = limiter.wrap(genRequestPromise);
+const updateUsers = async (users) => {
 	const userUpdateQueue = users.map(user=>{
 		return throttledUserUpdate(user)
 	})
-	return userUpdateQueue
-}
-
-const startQueue = async (userUpdateQueue) => {
-	try {
-		const results = await Promise.all(userUpdateQueue);
-		return results
-	} catch(err){
-		throw err 
+	try{
+		const results = Promise.all(userUpdateQueue)
+		if(results){
+			return results
+		} else {
+			throw new Error('No Results');
+		}
+	} catch(err) {
+		throw err
 	}
 }
 
-const processResults = (jobResults) => {
-	//could grab data and reprocess until no failures
+const processResults = () => {
+	//loop through results and 
+		//generate success metrics 
+		//save index positions of failures for retry if appropriate
 }
 
 const startJob = async () => {
+	const pathName = process.env.PATH_NAME;
 	try{
-		const pathName = process.env.PATH_NAME;
 		const users = await processInput(pathName);
-		const userUpdateQueue = genQueue(users)
-		// const jobResults = await startQueue(userUpdateQueue)
-		// processResults(jobResults)
+		const results = await updateUsers(users)
+		console.log(results)
+		// processResults()
 	} catch (err) {
 		throw err 
 	}
