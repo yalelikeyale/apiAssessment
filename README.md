@@ -1,4 +1,4 @@
-# *API Assessment*
+# **API Assessment**
 
 ### **Description:**
 Read in a CSV file and write two separate API calls:
@@ -6,6 +6,8 @@ Read in a CSV file and write two separate API calls:
 - userUpdate.js
 2. Bulk User Update (POST /api/users/bulkUpdate)
 - bulkUserUpdate.js
+
+### **Implementation**
 
 1. Clone the Repo
 2. Install the dependencies by executing `npm install package.json`
