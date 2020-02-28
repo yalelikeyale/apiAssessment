@@ -14,6 +14,7 @@ Read in a CSV file and write two separate API calls:
    
    
    `API_KEY={ENTER YOUR API KEY HERE}`
+   
    `PATH_NAME='./{THE NAME OF YOUR USERS CSV FILE'`
    
    
