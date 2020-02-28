@@ -10,7 +10,7 @@ Read in a CSV file and write two separate API calls:
 ### **Implementation**
 
 1. Clone the Repo
-2. Install the dependencies by executing `npm install package.json`
+2. Install the dependencies by executing `npm install`
 3. Create a file named ".env" that contains the following text:
    
    `API_KEY={ENTER YOUR API KEY HERE}`
