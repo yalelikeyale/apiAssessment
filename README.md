@@ -11,6 +11,7 @@ Read in a CSV file and write two separate API calls:
 2. Navigate to each folder and perform the following:
    * Execute `npm install package.json`
    * Create a file named ".env" that contains the following text:
+   
    `
    API_KEY={ENTER YOUR API KEY HERE}
    PATH_NAME='./{THE NAME OF YOUR USERS CSV FILE'
