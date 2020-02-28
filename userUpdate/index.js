@@ -45,7 +45,7 @@ const genRequestPromise = (user) => {
 }
 const throttledUserUpdate = limiter.wrap(genRequestPromise);
 
-const updateUsers = async (users) => {
+const executeUserUpdateQueue = async (users) => {
 	const userUpdateQueue = users.map(user=>{
 		return throttledUserUpdate(user)
 	})
@@ -71,7 +71,7 @@ const startJob = async () => {
 	const pathName = process.env.PATH_NAME;
 	try{
 		const users = await processInput(pathName);
-		const results = await updateUsers(users)
+		const results = await executeUserUpdateQueue(users)
 		console.log(results)
 		// processResults()
 	} catch (err) {
