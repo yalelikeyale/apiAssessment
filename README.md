@@ -18,6 +18,8 @@ Read in a CSV file and write two separate API calls:
    `PATH_NAME='./tomato_users.csv'`
    
 4. Profit
+- For Bulk Update, run: `node bulkUserUpdate.js`
+- For User Update, run: `node userUpdate.js`
 
    
    
