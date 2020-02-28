@@ -1,26 +1,17 @@
 {
-  "name": "userupdate",
+  "name": "bulkuserupdate",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/yalelikeyale/userUpdate.git"
-  },
-  "author": "yale",
+  "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/yalelikeyale/userUpdate/issues"
-  },
-  "homepage": "https://github.com/yalelikeyale/userUpdate#readme",
   "dependencies": {
     "axios": "^0.19.2",
     "bottleneck": "^2.19.5",
     "csvtojson": "^2.0.10",
-    "dotenv": "^8.2.0",
-    "package.json": "^2.0.1"
+    "dotenv": "^8.2.0"
   }
 }
