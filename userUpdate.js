@@ -92,9 +92,11 @@ const processInput = async (pathName) => {
 		const usersArray = await csv().fromFile(pathName);
 
 		if(usersArray){
+			// pass each user object through data validation function
 			const cleanUsers = usersArray.map(user=>{
 				return cleanUserData(user);
 			})
+			// filter for users with a valid email
 			const filteredUsers = cleanUsers.filter(user=>user.email)
 			if(filteredUsers.length > 0){
 				console.log(`${cleanUsers.length - filteredUsers.length} Users dropped from job due to invalid Email`);

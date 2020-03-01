@@ -52,7 +52,7 @@ const executeUserUpdateQueue = async (userBatches) => {
 	}
 }
 
-//recursive function to chunk array into a subset of arrays per a defined limiter
+//recursive function to chunk array into a subset of arrays per with up to the defined maximum
 function chunkUsersPayload(array, size) {
    if(array.length <= size){
        return [array]
@@ -109,9 +109,11 @@ const processInput = async (pathName) => {
 		//leverage csvtojson to generate array of user objects
 		const usersArray = await csv().fromFile(pathName);
 		if(usersArray){
+			// pass each user object through data validation function
 			const cleanUsers = usersArray.map(user=>{
 				return cleanUserData(user);
 			})
+			// filter for users with a valid email 
 			const filteredUsers = cleanUsers.filter(user=>user.email);
 			if(filteredUsers.length > 0){
 				console.log(`${cleanUsers.length - filteredUsers.length} Users dropped from job due to invalid Email`);
