@@ -15,7 +15,6 @@ Expects a CSV delimited by commas with the following headers and associated data
 | firstName | lastName | email | favoriteTomato | totalTomatoOrders | daysSinceLastOrder | zip | phoneNumber | age | streetAddress | city | state |customMessageOne | gender |
 | ------ | ------ | ------ | ------- | ------ | ------ | ------ | ------- | ------ | ------ | ------ | ------- | ------ | ------ | 
 | string | string | string | string | int | int | int | string | int | string | string | string | string | string | 
-`
 
 ### **Implementation**
 
