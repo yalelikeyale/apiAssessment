@@ -7,6 +7,34 @@ Read in a CSV file and write two separate API calls:
 2. Bulk User Update (POST /api/users/bulkUpdate)
 - bulkUserUpdate.js
 
+### **Requirements**
+*Developed with Node 13+*
+
+Expects a CSV delimited by commas with the following headers: 
+
+| firstName | lastName | email | favoriteTomato | totalTomatoOrders | daysSinceLastOrder | zip | phoneNumber | age | streetAddress | city | state |customMessageOne | gender |
+| ------ | ------ | ------ | ------- | ------ | ------ | ------ | ------- | ------ | ------ | ------ | ------- | ------ | ------ | 
+
+
+`
+  {
+    firstName: string,
+    lastName: string,
+    email: string & matches standard email pattern of string@string.string,
+    favoriteTomato: string,
+    totalTomatoOrders: int,
+    daysSinceLastOrder: int,
+    zip: int,
+    phoneNumber: string,
+    age: int,
+    streetAddress: string,
+    city: string,
+    state: string,
+    customMessageOne: string with less than or equal to 1025 characters,
+    gender: string
+  }
+`
+
 ### **Implementation**
 
 1. Clone the Repo
@@ -20,6 +48,3 @@ Read in a CSV file and write two separate API calls:
 4. Profit
 - For Bulk Update, run: `node bulkUserUpdate.js`
 - For User Update, run: `node userUpdate.js`
-
-   
-   
