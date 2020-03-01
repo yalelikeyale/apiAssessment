@@ -87,7 +87,7 @@ const cleanUserData = (user) => {
 			    favoriteTomato: typeof user.favoriteTomato == 'string' ? user.favoriteTomato : null,
 			    totalTomatoOrders: parseInt(user.totalTomatoOrders) || null,
 			    daysSinceLastOrder: parseInt(user.daysSinceLastOrder) || null,
-			    zip: typeof user.zip == 'string' ? user.zip : null,
+			    zip: user.zip.length == 5? parseInt(user.zip) : null || null,
 			    phoneNumber: typeof user.phoneNumber == 'string' ? user.phoneNumber : null,
 			    age: parseInt(user.age) || null,
 			    streetAddress: typeof user.streetAddress == 'string' ? user.streetAddress : null,
@@ -108,23 +108,23 @@ const processInput = async (pathName) => {
 	try {
 		//leverage csvtojson to generate array of user objects
 		const usersArray = await csv().fromFile(pathName);
-
 		if(usersArray){
 			const cleanUsers = usersArray.map(user=>{
 				return cleanUserData(user);
 			})
-			return cleanUsers;
+			const filteredUsers = cleanUsers.filter(user=>user.email);
+			if(filteredUsers.length > 0){
+				console.log(`${cleanUsers.length - filteredUsers.length} Users dropped from job due to invalid Email`);
+				//translate user object to payload called for per the bulk update spec
+				const usersPayload = payloadGenerator(filteredUsers);
+				//chunck array of payloads to limit to 50 users per bulk update request
+				const userBatches = chunkUsersPayload(usersPayload,50);
+				return userBatches
+			} else {
+				throw new Error('No valid User Emails')
+			}
 		} else {
 			throw new Error('No Data to Process')
-		}
-		//translate user object to payload called for per the bulk update spec
-		const usersPayload = payloadGenerator(usersArray);
-		//check array of payloads to limit to 50 users per bulk update request
-		const userBatches = chunkUsersPayload(usersPayload,50)
-		if(userBatches){
-			return userBatches
-		} else {
-			throw new Error('No Data to Submit')
 		}
 	} catch (err) {
 		throw err 

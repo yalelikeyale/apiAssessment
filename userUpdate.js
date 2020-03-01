@@ -65,11 +65,11 @@ const cleanUserData = (user) => {
 			return {
 			    firstName: typeof user.firstName == 'string' ? user.firstName : null,
 			    lastName: typeof user.lastName == 'string' ? user.lastName : null,
-			    email: emailRE.test(user.email) ? user.email : null,
+			    email: (user.email) && (emailRE.test(user.email)) ? user.email : null,
 			    favoriteTomato: typeof user.favoriteTomato == 'string' ? user.favoriteTomato : null,
 			    totalTomatoOrders: parseInt(user.totalTomatoOrders) || null,
 			    daysSinceLastOrder: parseInt(user.daysSinceLastOrder) || null,
-			    zip: typeof user.zip == 'string' ? user.zip : null,
+			    zip: user.zip.length == 5? parseInt(user.zip) : null || null,
 			    phoneNumber: typeof user.phoneNumber == 'string' ? user.phoneNumber : null,
 			    age: parseInt(user.age) || null,
 			    streetAddress: typeof user.streetAddress == 'string' ? user.streetAddress : null,
@@ -95,7 +95,13 @@ const processInput = async (pathName) => {
 			const cleanUsers = usersArray.map(user=>{
 				return cleanUserData(user);
 			})
-			return cleanUsers;
+			const filteredUsers = cleanUsers.filter(user=>user.email)
+			if(filteredUsers.length > 0){
+				console.log(`${cleanUsers.length - filteredUsers.length} Users dropped from job due to invalid Email`);
+				return filteredUsers;
+			} else {
+				throw new Error('No valid User Emails')
+			}
 		} else {
 			throw new Error('No Data to Process')
 		}
