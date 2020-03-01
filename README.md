@@ -18,6 +18,7 @@ Read in a CSV file and write two separate API calls:
 
 2. Each user must have an associated email that follows the pattern of string@string.string
 3. Custom messages are limited to 1025 characters
+4. User CSV must be named tomato_users.csv and be located in the same directory as the js functions
 
 
 
