@@ -13,8 +13,11 @@ const limiter = new Bottleneck({
 	minTime:100,
 	maxConcurrent:1
 })
+
+//input validation variables
 const emailRE = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 const userKeys = ['firstName','lastName','email','favoriteTomato','totalTomatoOrders','daysSinceLastOrder','zip','phoneNumber','age','streetAddress','city','state','customMessageOne','gender'];
+
 //translate user object to request payload per user update spec
 const genRequestPromise = (user) => {
 	const email = user.email;
