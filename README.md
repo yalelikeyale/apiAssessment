@@ -13,8 +13,8 @@ Read in a CSV file and write two separate API calls:
 1. Expects a CSV delimited by commas with the following headers and associated data-types: 
 
 | firstName | lastName | email | favoriteTomato | totalTomatoOrders | daysSinceLastOrder | zip | phoneNumber | age | streetAddress | city | state |customMessageOne | gender |
-| string | string | string | string | int | int | int | string | int | string | string | string | string | string | 
 | ------ | ------ | ------ | ------- | ------ | ------ | ------ | ------- | ------ | ------ | ------ | ------- | ------ | ------ | 
+| string | string | string | string | int | int | int | string | int | string | string | string | string | string | 
 
 2. Each user must have an associated email that follows the pattern of string@string.string
 3. Custom messages are limited to 1025 characters
