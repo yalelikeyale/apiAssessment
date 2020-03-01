@@ -46,7 +46,6 @@ const executeUserUpdateQueue = async (userBatches) => {
 	}
 }
 
-//stackoverflow is a godsend
 //recursive function to chunk array into a subset of arrays per a defined limiter
 function chunkUsersPayload(array, size) {
    if(array.length <= size){

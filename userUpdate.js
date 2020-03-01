@@ -3,6 +3,7 @@
 const axios = require('axios');
 const csv = require('csvtojson');
 const Bottleneck = require('bottleneck');
+const isEqual = require('lodash.isequal');
 
 // set environment variables
 require('dotenv').config();
@@ -12,7 +13,8 @@ const limiter = new Bottleneck({
 	minTime:100,
 	maxConcurrent:1
 })
-
+const emailRE = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+const userKeys = ['firstName','lastName','email','favoriteTomato','totalTomatoOrders','daysSinceLastOrder','zip','phoneNumber','age','streetAddress','city','state','customMessageOne','gender'];
 //translate user object to request payload per user update spec
 const genRequestPromise = (user) => {
 	const email = user.email;
@@ -54,18 +56,43 @@ const executeUserUpdateQueue = async (users) => {
 	}
 }
 
-// const processResults = () => {
-// 	//loop through results and 
-// 		//generate success metrics 
-// 		//save index positions of failures for retry if appropriate
-// }
+const cleanUserData = (user) => {
+	try {
+		if(isEqual(Object.keys(user),userKeys)){
+			return {
+			    firstName: typeof user.firstName == 'string' ? user.firstName : null,
+			    lastName: typeof user.lastName == 'string' ? user.lastName : null,
+			    email: emailRE.test(user.email) ? user.email : null,
+			    favoriteTomato: typeof user.favoriteTomato == 'string' ? user.favoriteTomato : null,
+			    totalTomatoOrders: parseInt(user.totalTomatoOrders) || null,
+			    daysSinceLastOrder: parseInt(user.daysSinceLastOrder) || null,
+			    zip: typeof user.zip == 'string' ? user.zip : null,
+			    phoneNumber: typeof user.phoneNumber == 'string' ? user.phoneNumber : null,
+			    age: parseInt(user.age) || null,
+			    streetAddress: typeof user.streetAddress == 'string' ? user.streetAddress : null,
+			    city: typeof user.city == 'string' ? user.city : null,
+			    state: typeof user.state == 'string' ? user.state : null,
+			    customMessageOne: (typeof user.customMessageOne == 'string') && (user.customMessageOne.length <= 1025) ? user.customMessageOne : null,
+			    gender: typeof user.gender == 'string' ? user.gender : null
+			}
+		} else {
+			throw new Error('Incorrect User Keys')
+		}
+	} catch (err) {
+		throw err
+	}
+}
 
 const processInput = async (pathName) => {
 	try {
 		//leverage csvtojson to create array of user objects from CSV
 		const usersArray = await csv().fromFile(pathName);
+
 		if(usersArray){
-			return usersArray
+			const cleanUsers = usersArray.map(user=>{
+				return cleanUserData(user);
+			})
+			return cleanUsers;
 		} else {
 			throw new Error('No Data to Process')
 		}
@@ -82,9 +109,6 @@ const startJob = async () => {
 		const users = await processInput(pathName);
 		//generate api requests from array of user objects
 		const results = await executeUserUpdateQueue(users)
-		console.log(results)
-		//looks like the api responds with some useful info for reprocessing & metrics
-		// processResults()
 	} catch (err) {
 		throw err 
 	}
