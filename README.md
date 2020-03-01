@@ -10,29 +10,11 @@ Read in a CSV file and write two separate API calls:
 ### **Requirements**
 *Developed with Node 13+*
 
-Expects a CSV delimited by commas with the following headers: 
+Expects a CSV delimited by commas with the following headers and associated data-types: 
 
 | firstName | lastName | email | favoriteTomato | totalTomatoOrders | daysSinceLastOrder | zip | phoneNumber | age | streetAddress | city | state |customMessageOne | gender |
 | ------ | ------ | ------ | ------- | ------ | ------ | ------ | ------- | ------ | ------ | ------ | ------- | ------ | ------ | 
-
-
-`
-  {
-    firstName: string,
-    lastName: string,
-    email: string & matches standard email pattern of string@string.string,
-    favoriteTomato: string,
-    totalTomatoOrders: int,
-    daysSinceLastOrder: int,
-    zip: int,
-    phoneNumber: string,
-    age: int,
-    streetAddress: string,
-    city: string,
-    state: string,
-    customMessageOne: string with less than or equal to 1025 characters,
-    gender: string
-  }
+| string | string | string | string | int | int | int | string | int | string | string | string | string | string | 
 `
 
 ### **Implementation**
