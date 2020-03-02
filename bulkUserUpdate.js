@@ -81,20 +81,20 @@ const cleanUserData = (user) => {
 	try {
 		if(isEqual(Object.keys(user),userKeys)){
 			return {
-			    firstName: typeof user.firstName == 'string' ? user.firstName : null,
-			    lastName: typeof user.lastName == 'string' ? user.lastName : null,
+			    firstName: user.firstName.trim() ? user.firstName.trim() : null,
+			    lastName: user.lastName.trim() ? user.lastName.trim() : null,
 			    email: emailRE.test(user.email) ? user.email : null,
-			    favoriteTomato: typeof user.favoriteTomato == 'string' ? user.favoriteTomato : null,
+			    favoriteTomato: user.favoriteTomato ? user.favoriteTomato.trim() : null,
 			    totalTomatoOrders: parseInt(user.totalTomatoOrders) || null,
 			    daysSinceLastOrder: parseInt(user.daysSinceLastOrder) || null,
 			    zip: user.zip.length == 5? parseInt(user.zip) : null || null,
-			    phoneNumber: typeof user.phoneNumber == 'string' ? user.phoneNumber : null,
+			    phoneNumber: user.phoneNumber.trim() ? user.phoneNumber : null,
 			    age: parseInt(user.age) || null,
-			    streetAddress: typeof user.streetAddress == 'string' ? user.streetAddress : null,
-			    city: typeof user.city == 'string' ? user.city : null,
-			    state: typeof user.state == 'string' ? user.state : null,
-			    customMessageOne: (typeof user.customMessageOne == 'string') && (user.customMessageOne.length <= 1025) ? user.customMessageOne : null,
-			    gender: typeof user.gender == 'string' ? user.gender : null
+			    streetAddress: user.streetAddress.trim() ? user.streetAddress : null,
+			    city: user.city.trim() ? user.city.trim() : null,
+			    state: user.state.trim() ? user.state.trim() : null,
+			    customMessageOne: (user.customMessageOne.trim()) && (user.customMessageOne.length <= 1025) ? user.customMessageOne : null,
+			    gender: user.gender.trim()? user.gender.trim() : null
 			}
 		} else {
 			throw new Error('Incorrect User Keys')
