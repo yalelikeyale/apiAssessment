@@ -120,6 +120,8 @@ const startJob = async () => {
 		const users = await processInput(pathName);
 		//generate api requests from array of user objects
 		const results = await executeUserUpdateQueue(users)
+		console.log(results);
+		//process results - success metrics + retry
 	} catch (err) {
 		throw err 
 	}
